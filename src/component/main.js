@@ -2,19 +2,26 @@ import React, { useEffect } from 'react';
 import "../css/main.css";
 
 const Main = () => {
-    const [state, update_state] = React.useState({ "arr": [], "max": 7, "min": 0, "response-arr": [], "loader": true })
+    const [state, update_state] = React.useState({ "arr": [], "max": adjust_grid(), "min": 0, "response-arr": [], "loader": true, "pageno": 1 })
     var year_arr = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
-    useEffect(() => {
-        console.log(window.innerWidth);
+    function adjust_grid() {
+
         if (window.innerWidth <= 1200 && window.innerWidth > 1024) {
-            update_state({ ...state, "max": 5 })
+            return 5;
         }
         else if (window.innerWidth <= 1024 && window.innerWidth > 700) {
-            update_state({ ...state, "max": 3 })
+            return 3;
         }
         else if (window.innerWidth <= 700) {
-            update_state({ ...state, "max": 3 })
+            return 1;
         }
+        else {
+            return 7;
+
+        }
+    }
+    useEffect(() => {
+
         fetch("https://api.spacexdata.com/v3/launches?limit=100").then((res) => {
             if (res.status === 200) {
                 return res.json()
@@ -41,12 +48,33 @@ const Main = () => {
     //         update_state({ ...state, "min": state["min"] + 8 })
     //     }
     // }
+    function pageShift(e) {
+        if (e.target.id === "prev") {
 
+            if (state.min >= 0) {
+                update_state({ ...state, "min": state["min"] - adjust_grid() })
+            }
+        }
+        if (e.target.id === "next") {
+
+
+            if (state.max <= state.arr.length - 1) {
+                update_state({ ...state, "min": state["max"] + adjust_grid() })
+            }
+        }
+
+
+    }
 
     React.useEffect(() => {
         update_state({ ...state, "response-arr": state["arr"] })
     }, [state["arr"]])
     return (<>
+        <div className='prevnext-container'>
+            <div id='prev' onClick={pageShift}>Prev</div>
+            <div className='pageno'>{state.pageno}</div>
+            <div id='next' onClick={pageShift}>Next</div>
+        </div>
         <div className='spacex-heading'>SpaceX Launch Programs</div>
         <div className='spacex-container'>
             <div className='spacex-filter'>
@@ -55,10 +83,8 @@ const Main = () => {
 
                 <div className='filter-opt-container'>
                     {year_arr.map(function (val, i) {
-
                         return (<>
                             <div className='filter-opt'>{val}</div>
-
                         </>)
                     })}
                 </div>
@@ -108,4 +134,4 @@ const Main = () => {
 
 
 
-export default Main
+export default Main;
