@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import "../css/main.css";
 
 const Main = () => {
-    const [state, update_state] = React.useState({ "arr": [], "max": adjust_grid(), "min": 0, "response-arr": [], "loader": true, "pageno": 1, "show-prevnext": false, "year_filter": [], "success_launch_filter": [], "success_land_filter": [] })
+    const [state, update_state] = React.useState({ "arr": [], "max": adjust_grid(), "min": 0, "loader": true, "pageno": 1, "show-prevnext": false, "launch_year": "", "launch_success": "", "landing_success": "" })
     var year_arr = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
     var arr = [], arr2 = [], arr3 = [];
 
@@ -37,40 +37,23 @@ const Main = () => {
     }, [])
 
     React.useEffect(() => {
-        var final_arr = [], final_arr_2 = [];
-        if (state["year_filter"].indexOf(null) === 0 || state["success_land_filter"].indexOf(null) === 0 || state["success_launch_filter"].indexOf(null) === 0) {
-            update_state({ ...state, "response-arr": [] })
-            console.log("2");
-        }
-        else {
-            var count=0;
-            console.log("done");
-            final_arr = state["year_filter"].concat(state["success_land_filter"], state["success_launch_filter"]);
-           console.log(final_arr);
-            if(state["year_filter"].length===0){
-                count++;
+        var url = "https://api.spacexdata.com/v3/launches?limit=100&";
+        var string = state["launch_year"] + state["landing_success"] + state["launch_success"];
+        console.log(string);
+        fetch(url + string).then((res) => {
+            if (res.status === 200) {
+                return res.json()
             }
-            if(state["success_launch_filter"].length===0){
-                count++;
+            else {
+                alert("something went wrong,please try again");
+                window.location.reload();
             }
-            if(state["success_land_filter"].length===0){
-                count++;
-            }
-            if(count===2||count===3){
-                update_state({ ...state, "response-arr": final_arr })
-            }
-            else{
-                for (let i = 0; i < final_arr.length; i++) {
-                    if (final_arr.indexOf(final_arr[i]) !== i) {
-                        final_arr_2.push(final_arr[i]);
-                    }
-                }
-                console.log(final_arr_2);
-                update_state({ ...state, "response-arr": final_arr_2 })
-            }
-        }
-    }, [state["year_filter"], state["success_land_filter"], state["success_launch_filter"]])
+        }).then(function (data) {
+            update_state({ ...state, "arr": data, "loader": false })
+        }).catch((err) => {
+        })
 
+    }, [state["launch_year"], state["landing_success"], state["launch_success"]])
 
     function pageShift(e) {
         if (e.target.id === "prev") {
@@ -79,54 +62,45 @@ const Main = () => {
             }
         }
         if (e.target.id === "next") {
-            if (state.max <= state["response-arr"].length - 1) {
+            if (state.max <= state["arr"].length - 1) {
                 update_state({ ...state, "min": state["min"] + adjust_grid(), "max": state["max"] + adjust_grid(), "pageno": state["pageno"] + 1 })
             }
         }
     }
 
     React.useEffect(() => {
-        update_state({ ...state, "response-arr": state["arr"] })
-    }, [state["arr"]])
-
-    React.useEffect(() => {
         var flag = false;
-        if (state["response-arr"].length > state["max"]) {
+        if (state["arr"].length > state["max"]) {
             flag = true;
         }
         update_state({ ...state, "show-prevnext": flag, "pageno": 1 })
-    }, [state["response-arr"]])
+    }, [state["arr"]])
+
+    function styling(selector, id) {
+        console.log(selector);
+        var element = document.querySelectorAll("." + selector);
+        for (let i = 0; i < element.length; i++) {
+            element[i].style.color = "black";
+            element[i].style.background = "#7CB68E";
+            
+        }
+        id.style.color = "white";
+       id.style.background = "green";
+    }
 
     function launchyear_filter(e, value) {
+        if (value === "launch_year") {
 
-        for (let i = 0; i < state["arr"].length; i++) {
-            if (value === "launch_year") {
-                if (state["arr"][i].launch_year === e.target.id) {
-                    arr.push(state["arr"][i]);
-                }
-                if (i === state["arr"].length - 1 && arr.length === 0) {
-                    arr = [null];
-                }
-                update_state({ ...state, "year_filter": arr })
-            }
-            if (value === "launch_success") {
-                if (JSON.stringify(state["arr"][i].launch_success) === e.target.id) {
-                    arr2.push(state["arr"][i]);
-                }
-                if (i === state["arr"].length - 1 && arr2.length === 0) {
-                    arr2 = [null];
-                }
-                update_state({ ...state, "success_launch_filter": arr2 })
-            }
-            if (value === "landing_success") {
-                if (JSON.stringify(state["arr"][i].upcoming) === e.target.id) {
-                    arr3.push(state["arr"][i]);
-                }
-                if (i === state["arr"].length - 1 && arr3.length === 0) {
-                    arr3 = [null];
-                }
-                update_state({ ...state, "success_land_filter": arr3 })
-            }
+            styling("launch_year",  e.target)
+            update_state({ ...state, "launch_year": `launch_year=${e.target.id}&`, "loader": true })
+        }
+        if (value === "landing_success") {
+            styling("landing_success", e.target)
+            update_state({ ...state, "landing_success": `land_success=${e.target.id}&`, "loader": true })
+        }
+        if (value === "launch_success") {
+            styling("launch_success",  e.target)
+            update_state({ ...state, "launch_success": `launch_success=${e.target.id}&`, "loader": true })
         }
     }
 
@@ -146,26 +120,26 @@ const Main = () => {
                 <div className='filter-opt-container'>
                     {year_arr.map(function (val, i) {
                         return (<>
-                            <div className='filter-opt' id={val} onClick={(e) => launchyear_filter(e, "launch_year")}>{val}</div>
+                            <div className='filter-opt launch_year' id={val} onClick={(e) => launchyear_filter(e, "launch_year")}>{val}</div>
                         </>)
                     })}
                 </div>
                 <div className='filter-main-heading2'>Successful Launch</div>
                 <div className='filter-opt-container'>
-                    <div className='filter-opt' id="true" onClick={(e) => launchyear_filter(e, "launch_success")}>True</div>
-                    <div className='filter-opt' id="false" onClick={(e) => launchyear_filter(e, "launch_success")}>False</div>
+                    <div className='filter-opt launch_success' id="true" onClick={(e) => launchyear_filter(e, "launch_success")}>True</div>
+                    <div className='filter-opt launch_success' id="false" onClick={(e) => launchyear_filter(e, "launch_success")}>False</div>
                 </div>
                 <div className='filter-main-heading2'>Successful Landing</div>
                 <div className='filter-opt-container'>
-                    <div className='filter-opt' id="true" onClick={(e) => launchyear_filter(e, "landing_success")}>True</div>
-                    <div className='filter-opt' id="false" onClick={(e) => launchyear_filter(e, "landing_success")}>False</div>
+                    <div className='filter-opt landing_success' id="true" onClick={(e) => launchyear_filter(e, "landing_success")}>True</div>
+                    <div className='filter-opt landing_success' id="false" onClick={(e) => launchyear_filter(e, "landing_success")}>False</div>
                 </div>
             </div>
             <div className='spacex-item-container'>
                 {state.loader === true ? <div className='spacex-loader'>Loading....</div> :
                     <>
-                        {state["response-arr"].length !== 0 ?
-                            state["response-arr"].map(function (val, i) {
+                        {state["arr"].length !== 0 ?
+                            state["arr"].map(function (val, i) {
                                 if (i <= state.max && i >= state.min) {
                                     return (<>
                                         <div className='spacex-item'>
