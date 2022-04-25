@@ -4,7 +4,6 @@ import "../css/main.css";
 const Main = () => {
     const [state, update_state] = React.useState({ "arr": [], "max": adjust_grid(), "min": 0, "loader": true, "pageno": 1, "show-prevnext": false, "launch_year": "", "launch_success": "", "landing_success": "" })
     var year_arr = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
-    var arr = [], arr2 = [], arr3 = [];
 
     function adjust_grid() {
         if (window.innerWidth <= 1200 && window.innerWidth > 1024) {
@@ -81,8 +80,7 @@ const Main = () => {
         var element = document.querySelectorAll("." + selector);
         for (let i = 0; i < element.length; i++) {
             element[i].style.color = "black";
-            element[i].style.background = "#7CB68E";
-            
+            element[i].style.background = "lightgreen";  
         }
         id.style.color = "white";
        id.style.background = "green";
@@ -90,7 +88,6 @@ const Main = () => {
 
     function launchyear_filter(e, value) {
         if (value === "launch_year") {
-
             styling("launch_year",  e.target)
             update_state({ ...state, "launch_year": `launch_year=${e.target.id}&`, "loader": true })
         }

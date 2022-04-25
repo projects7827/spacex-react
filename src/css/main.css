@@ -28,9 +28,8 @@ body {
     cursor: pointer;
     padding-left: 10px;
     padding-right: 10px;
-    background: #009A17;
+    background: lightgreen;
     padding-top: 5px;
-    color: white;
     border-radius: 4px;
     padding-bottom: 5px;
 
@@ -76,7 +75,7 @@ font-weight:600;
 
 .filter-opt {
     padding-bottom: 5px;
-    background: #7CB68E;
+    background: lightgreen;
     color: black;
     padding-top: 5px;
     border-radius: 4px;
