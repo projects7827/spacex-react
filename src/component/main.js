@@ -33,6 +33,7 @@ const Main = () => {
     }
   }
   useEffect(() => {
+      console.log("testing");
     fetch("https://api.spacexdata.com/v3/launches?limit=100")
       .then((res) => {
         if (res.status === 200) {
