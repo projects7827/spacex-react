@@ -6,10 +6,13 @@ import Main from "../src/component/main";
 
 
 const app = Express();
+console.log(__dirname, '..', 'build');
+app.use(Express.static(path.resolve('build')))
 
 app.get('/', (req, res) => {
-    console.log(ReactDOMServer);
-  res.send(ReactDOMServer.renderToString(<Main />))
+    console.log("homepage");
+    console.log(<Main />);
+  res.send(`<div id="root">${ReactDOMServer.renderToString(<Main />)}</div>`)
 })
 app.listen(8000,()=>{
     console.log("connected");

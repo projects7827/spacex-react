@@ -3,6 +3,11 @@
     display: flex;
     background: none;
 }
+#root{
+    position: relative;
+    width: 100vw;
+    height: 100vw;
+}
 
 body {
     background: rgba(230, 230, 230);

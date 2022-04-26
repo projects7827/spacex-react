@@ -2,23 +2,24 @@ import React, { useEffect } from 'react';
 import "../css/main.css";
 
 const Main = () => {
-    const [state, update_state] = React.useState({ "arr": [], "max": adjust_grid(), "min": 0, "loader": true, "pageno": 1, "show-prevnext": false, "launch_year": "", "launch_success": "", "landing_success": "" })
+    const [state, update_state] = React.useState({ "arr": [], "max": 7, "min": 0, "loader": true, "pageno": 1, "show-prevnext": false, "launch_year": "", "launch_success": "", "landing_success": "" })
     var year_arr = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]
 
-    function adjust_grid() {
-        if (window.innerWidth <= 1200 && window.innerWidth > 1024) {
-            return 5;
-        }
-        else if (window.innerWidth <= 1024 && window.innerWidth > 700) {
-            return 3;
-        }
-        else if (window.innerWidth <= 700) {
-            return 3;
-        }
-        else {
-            return 7;
-        }
-    }
+    // function 7 {
+    //     var rootElement=document.querySelector("#root");
+    //     if (rootElement.innerWidth <= 1200 && rootElement.innerWidth > 1024) {
+    //         return 5;
+    //     }
+    //     else if (rootElement.innerWidth <= 1024 && rootElement.innerWidth > 700) {
+    //         return 3;
+    //     }
+    //     else if (rootElement.innerWidth <= 700) {
+    //         return 3;
+    //     }
+    //     else {
+    //         return 7;
+    //     }
+    // }
     useEffect(() => {
         fetch("https://api.spacexdata.com/v3/launches?limit=100").then((res) => {
             if (res.status === 200) {
@@ -26,7 +27,6 @@ const Main = () => {
             }
             else {
                 alert("something went wrong,please try again");
-                window.location.reload();
             }
         }).then(function (data) {
             update_state({ ...state, "arr": data, "loader": false })
@@ -45,7 +45,6 @@ const Main = () => {
             }
             else {
                 alert("something went wrong,please try again");
-                window.location.reload();
             }
         }).then(function (data) {
             update_state({ ...state, "arr": data, "loader": false })
@@ -57,12 +56,12 @@ const Main = () => {
     function pageShift(e) {
         if (e.target.id === "prev") {
             if (state.min > 0) {
-                update_state({ ...state, "min": state["min"] - adjust_grid(), "max": state["max"] + adjust_grid(), "pageno": state["pageno"] - 1 })
+                update_state({ ...state, "min": state["min"] - 7, "max": state["max"] + 7, "pageno": state["pageno"] - 1 })
             }
         }
         if (e.target.id === "next") {
             if (state.max <= state["arr"].length - 1) {
-                update_state({ ...state, "min": state["min"] + adjust_grid(), "max": state["max"] + adjust_grid(), "pageno": state["pageno"] + 1 })
+                update_state({ ...state, "min": state["min"] + 7, "max": state["max"] + 7, "pageno": state["pageno"] + 1 })
             }
         }
     }
@@ -75,28 +74,28 @@ const Main = () => {
         update_state({ ...state, "show-prevnext": flag, "pageno": 1 })
     }, [state["arr"]])
 
-    function styling(selector, id) {
-        console.log(selector);
-        var element = document.querySelectorAll("." + selector);
-        for (let i = 0; i < element.length; i++) {
-            element[i].style.color = "black";
-            element[i].style.background = "lightgreen";  
-        }
-        id.style.color = "white";
-       id.style.background = "green";
-    }
+    // function styling(selector, id) {
+    //     console.log(selector);
+    //     var element = document.querySelectorAll("." + selector);
+    //     for (let i = 0; i < element.length; i++) {
+    //         element[i].style.color = "black";
+    //         element[i].style.background = "lightgreen";  
+    //     }
+    //     id.style.color = "white";
+    //    id.style.background = "green";
+    // }
 
     function launchyear_filter(e, value) {
         if (value === "launch_year") {
-            styling("launch_year",  e.target)
+            // styling("launch_year",  e.target)
             update_state({ ...state, "launch_year": `launch_year=${e.target.id}&`, "loader": true })
         }
         if (value === "landing_success") {
-            styling("landing_success", e.target)
+            // styling("landing_success", e.target)
             update_state({ ...state, "landing_success": `land_success=${e.target.id}&`, "loader": true })
         }
         if (value === "launch_success") {
-            styling("launch_success",  e.target)
+            // styling("launch_success",  e.target)
             update_state({ ...state, "launch_success": `launch_success=${e.target.id}&`, "loader": true })
         }
     }
