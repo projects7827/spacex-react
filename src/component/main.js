@@ -21,6 +21,7 @@ const Main = () => {
   ];
   function grid_view() {
     var rootElement = ref.current["window"].offsetWidth;
+    console.log(rootElement);
     if (rootElement <= 1200 && rootElement > 1024) {
       return 5;
     } else if (rootElement <= 1024 && rootElement > 700) {
@@ -61,7 +62,7 @@ const Main = () => {
         }
       })
       .then(function (data) {
-        update_state({ ...state, arr: data, loader: false, max: grid_view() });
+        update_state({ ...state, "arr": data, "loader": false, "max": grid_view() });
       })
       .catch((err) => {});
   }, [state["launch_year"], state["landing_success"], state["launch_success"]]);
