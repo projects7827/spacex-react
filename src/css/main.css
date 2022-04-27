@@ -5,14 +5,16 @@
 }
 #root{
     position: relative;
+   
 }
 
 body {
     background: rgba(230, 230, 230);
 }
-.filter-opt input{
+input{
     position: absolute;
-    height: 0px;
+    height:0px;
+    width:0px;
 }
 
 .filter-main-heading {
@@ -85,6 +87,7 @@ font-weight:600;
     background: lightgreen;
     color: black;
     padding-top: 5px;
+    position:relative;
     border-radius: 4px;
     cursor: pointer;
     transition: 0.2s;
@@ -95,7 +98,7 @@ font-weight:600;
     background: green;
     color: white;
 }
-.filter-opt input[type="radio"]:checked+.filter-opt {
+input:checked+label {
     background:green;
     color:white;
 } 

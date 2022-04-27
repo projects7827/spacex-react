@@ -21,7 +21,6 @@ const Main = () => {
   ];
   function grid_view() {
     var rootElement = ref.current["window"].offsetWidth;
-    console.log(typeof rootElement);
     if (rootElement <= 1200 && rootElement > 1024) {
       return 5;
     } else if (rootElement <= 1024 && rootElement > 700) {
@@ -33,7 +32,6 @@ const Main = () => {
     }
   }
   useEffect(() => {
-      console.log("testing");
     fetch("https://api.spacexdata.com/v3/launches?limit=100")
       .then((res) => {
         if (res.status === 200) {
@@ -54,7 +52,6 @@ const Main = () => {
     var url = "https://api.spacexdata.com/v3/launches?limit=100&";
     var string =
       state["launch_year"] + state["landing_success"] + state["launch_success"];
-    console.log(string);
     fetch(url + string)
       .then((res) => {
         if (res.status === 200) {
@@ -91,9 +88,6 @@ const Main = () => {
       }
     }
   }
-  React.useEffect(() => {
-    console.log(state.max);
-  }, [state["max"]]);
 
   React.useEffect(() => {
     var flag = false;
@@ -103,20 +97,8 @@ const Main = () => {
     update_state({ ...state, "show-prevnext": flag, pageno: 1 });
   }, [state["arr"]]);
 
-  // function styling(selector, id) {
-  //     console.log(selector);
-  //     var element = document.querySelectorAll("." + selector);
-  //     for (let i = 0; i < element.length; i++) {
-  //         element[i].style.color = "black";
-  //         element[i].style.background = "lightgreen";
-  //     }
-  //     id.style.color = "white";
-  //    id.style.background = "green";
-  // }
-
   function launchyear_filter(e, value) {
     if (value === "launch_year") {
-      // styling("launch_year",  e.target)
       update_state({
         ...state,
         launch_year: `launch_year=${e.target.id}&`,
@@ -124,15 +106,14 @@ const Main = () => {
       });
     }
     if (value === "landing_success") {
-      // styling("landing_success", e.target)
+      console.log(e.target.id.replace("land-",""));
       update_state({
         ...state,
-        landing_success: `land_success=${e.target.id}&`,
+        landing_success: `land_success=${e.target.id.replace("land-","")}&`,
         loader: true,
       });
     }
     if (value === "launch_success") {
-      // styling("launch_success",  e.target)
       update_state({
         ...state,
         launch_success: `launch_success=${e.target.id}&`,
@@ -167,13 +148,14 @@ const Main = () => {
               {year_arr.map(function (val, i) {
                 return (
                   <>
-                    <label for={val} className="filter-opt launch_year">
-                      <input
-                        type="radio"
-                        name="launch_year"
-                        id={val}
-                        onChange={(e) => launchyear_filter(e, "launch_year")}
-                      />
+               
+                    <input
+                      type="radio"
+                      name="launch_year"
+                      id={val}
+                      onChange={(e) => launchyear_filter(e, "launch_year")}
+                    />
+                         <label for={val} className="filter-opt launch_year">
                       {val}
                     </label>
                   </>
@@ -182,44 +164,38 @@ const Main = () => {
             </div>
             <div className="filter-main-heading2">Successful Launch</div>
             <div className="filter-opt-container">
-              <label className="filter-opt launch_success">
-                True
-                <input
-                  type="radio"
-                  id="true"
-                  onClick={(e) => launchyear_filter(e, "launch_success")}
-                />
-              </label>
-              <label className="filter-opt launch_success">
-                False
-                <input
-                  type="radio"
-                  id="false"
-                  onClick={(e) => launchyear_filter(e, "launch_success")}
-                />
-              </label>
+              <input
+                type="radio"
+                id="true"
+                name="launch_success"
+                onClick={(e) => launchyear_filter(e, "launch_success")}
+              />
+              <label for="true" className="filter-opt launch_success">True</label>
+              <input
+                type="radio"
+                id="false"
+                name="launch_success"
+                onClick={(e) => launchyear_filter(e, "launch_success")}
+              />
+              <label for="false" className="filter-opt launch_success">False</label>
             </div>
             <div className="filter-main-heading2">Successful Landing</div>
             <div className="filter-opt-container">
-            <label className="filter-opt landing_success">
-                True
-                <input
-                  type="radio"
-                  id="true"
-                  onClick={(e) => launchyear_filter(e, "landing_success")}
-                />
-              </label>
-              <label className="filter-opt landing_success">
-                False
-                <input
-                  type="radio"
-                  id="false"
-                  onClick={(e) => launchyear_filter(e, "landing_success")}
-                />
-              </label>
-           
-           
-        
+              <input
+                type="radio"
+                name="landing_success"
+                id="land-true"
+                onClick={(e) => launchyear_filter(e, "landing_success")}
+              />
+              <label for="land-true" className="filter-opt landing_success">True</label>
+              <input
+                type="radio"
+                name="landing_success"
+                id="land-false"
+                onClick={(e) => launchyear_filter(e, "landing_success")}
+              />
+              <label for="land-false" className="filter-opt landing_success">False</label>
+
             </div>
           </div>
           <div className="spacex-item-container">
