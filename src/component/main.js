@@ -64,7 +64,7 @@ const Main = () => {
       .then(function (data) {
         update_state({ ...state, "arr": data, "loader": false, "max": grid_view() });
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }, [state["launch_year"], state["landing_success"], state["launch_success"]]);
 
   function pageShift(e) {
@@ -107,10 +107,10 @@ const Main = () => {
       });
     }
     if (value === "landing_success") {
-      console.log(e.target.id.replace("land-",""));
+      console.log(e.target.id.replace("land-", ""));
       update_state({
         ...state,
-        landing_success: `land_success=${e.target.id.replace("land-","")}&`,
+        landing_success: `land_success=${e.target.id.replace("land-", "")}&`,
         loader: true,
       });
     }
@@ -149,14 +149,14 @@ const Main = () => {
               {year_arr.map(function (val, i) {
                 return (
                   <>
-               
+
                     <input
                       type="radio"
                       name="launch_year"
                       id={val}
                       onChange={(e) => launchyear_filter(e, "launch_year")}
                     />
-                         <label for={val} className="filter-opt launch_year">
+                    <label for={val} className="filter-opt launch_year">
                       {val}
                     </label>
                   </>
@@ -210,11 +210,8 @@ const Main = () => {
                       return (
                         <>
                           <div className="spacex-item">
-                            <img
-                              src={val.links.mission_patch}
-                              loading="lazy"
-                              className="launch-img"
-                            />
+                            <div className="cover_img">                                {val.rocket.rocket_name}
+                            </div>
                             <div className="spacex-inner">
                               <div className="launch-heading">Rocket Name</div>
                               <div className="launch-value">

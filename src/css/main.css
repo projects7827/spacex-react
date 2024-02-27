@@ -3,18 +3,31 @@
     display: flex;
     background: none;
 }
-#root{
+
+#root {
     position: relative;
-   
+
 }
 
 body {
     background: rgba(230, 230, 230);
 }
-input{
+
+input {
     position: absolute;
-    height:0px;
-    width:0px;
+    height: 0px;
+    width: 0px;
+}
+
+.cover_img {
+    background: lightgreen;
+    height: 112px;
+    margin-bottom: 17px;
+    font-size: 30px;
+    display: flex;
+    place-items: center;
+    font-weight: bold;
+    justify-content: center;
 }
 
 .filter-main-heading {
@@ -68,11 +81,11 @@ input{
     bottom: 0px;
     left: 0px;
     margin: auto;
-    display:flex;
-    place-items:center;
-    justify-content:center;
+    display: flex;
+    place-items: center;
+    justify-content: center;
     font-size: 25px;
-font-weight:600;
+    font-weight: 600;
 }
 
 .spacex-filter {
@@ -87,7 +100,7 @@ font-weight:600;
     background: lightgreen;
     color: black;
     padding-top: 5px;
-    position:relative;
+    position: relative;
     border-radius: 4px;
     cursor: pointer;
     transition: 0.2s;
@@ -98,10 +111,11 @@ font-weight:600;
     background: green;
     color: white;
 }
+
 input:checked+label {
-    background:green;
-    color:white;
-} 
+    background: green;
+    color: white;
+}
 
 .filter-opt-container {
     display: grid;
@@ -132,15 +146,15 @@ input:checked+label {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-row-gap: 9px;
+    padding: 0px 10px;
+
 
 }
 
 .spacex-item {
     background: white;
     text-align: center;
-    padding-left: 10px;
     padding-bottom: 25px;
-    padding-right: 10px;
 }
 
 .launch-img {
@@ -160,7 +174,7 @@ input:checked+label {
 }
 
 .spacex-heading {
- 
+
     font-size: 26px;
     font-weight: bold;
     padding-bottom: 10px;
